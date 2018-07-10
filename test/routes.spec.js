@@ -52,7 +52,37 @@ describe('API Routes', () => {
           resp.body[0].should.have.property('highTemp');
           resp.body[0].highTemp.should.equal('-10');
           done();
-        })
-    })
+        });
+    });
+  });
+
+  describe('GET /api/v1/plants/', () => {
+    it('should return an array of plant objects', done => {
+      chai.request(server)
+        .get('/api/v1/plants/')
+        .end((err, resp) => {
+          resp.should.have.status(200);
+          resp.should.be.json;
+          resp.body.should.be.a('array');
+          resp.body.length.should.equal(2);
+          resp.body[0].should.have.property('id');
+          resp.body[0].id.should.equal(1);
+          resp.body[0].should.have.property('name');
+          resp.body[0].name.should.equal('Aloe');
+          resp.body[0].should.have.property('scientificName');
+          resp.body[0].scientificName.should.equal('sciAloe');
+          resp.body[0].should.have.property('care');
+          resp.body[0].care.should.equal('dont let it die');
+          resp.body[0].should.have.property('moisture');
+          resp.body[0].moisture.should.equal('not dry');
+          resp.body[0].should.have.property('light');
+          resp.body[0].light.should.equal('bright');
+          resp.body[0].should.have.property('maintenance');
+          resp.body[0].maintenance.should.equal('often');
+          resp.body[0].should.have.property('zone_id');
+          resp.body[0].zone_id.should.equal(1);
+          done();
+        });
+    });
   });
 });
