@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3000);
 
-app.get('api/v1/zones/', (request, response) => {
+app.get('/api/v1/zones/', (request, response) => {
   database('zones').select()
     .then( zones => {
       response.status(200).json(zones)
@@ -17,6 +17,34 @@ app.get('api/v1/zones/', (request, response) => {
     .catch( error => {
       response.status(500).json({ error })
     })
+});
+
+app.get('/api/v1/plants/', (request, response) => {
+  databse('zones').select()
+    .then( plants => {
+      response.status(200).json(plants)
+    })
+    .catch( error => {
+      response.status(500).json({ error })
+    })
+});
+
+app.post('/api/v1/plants', (request, response) => {
+  const { plant } = request.body;
+
+  for(let requiredParameter of ['name', 'scientificName', 'care', 'moisture', 'light', 'maintenance', 'zone_id']) {
+    return response.status(422)
+      .send({ error: `Expected formmat: { plant: { name: <String>, scientificName: <String>, care: <String>, 
+        moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You're missing a "${requiredParameter}" property.`})
+  }
+
+  database('plants').insert(plant, 'id')
+    .then( plant => {
+      response.status(201).json({ id: plant[0] })
+    })
+    .catch( error => {
+      response.status(500).json({ error })
+    });
 });
 
 app.listen(router.get('port'), () => {
