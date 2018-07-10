@@ -20,7 +20,7 @@ app.get('/api/v1/zones/', (request, response) => {
 });
 
 app.get('/api/v1/plants/', (request, response) => {
-  databse('zones').select()
+  database('plants').select()
     .then( plants => {
       response.status(200).json(plants)
     })
@@ -29,7 +29,7 @@ app.get('/api/v1/plants/', (request, response) => {
     })
 });
 
-app.post('/api/v1/plants', (request, response) => {
+app.post('/api/v1/plants/', (request, response) => {
   const { plant } = request.body;
 
   for(let requiredParameter of ['name', 'scientificName', 'care', 'moisture', 'light', 'maintenance', 'zone_id']) {
