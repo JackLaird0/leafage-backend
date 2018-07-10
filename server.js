@@ -47,6 +47,8 @@ app.post('/api/v1/plants', (request, response) => {
     });
 });
 
-app.listen(router.get('port'), () => {
-  console.log(`Leafage's Backend is running on ${router.get('port')}.`)
+app.listen(app.get('port'), () => {
+  console.log(`Leafage's Backend is running on ${app.get('port')}.`)
 });
+
+module.exports = app;
