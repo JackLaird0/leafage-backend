@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/JackLaird0/leafage-backend#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "knex": "^0.15.0",
+    "nightmare": "^3.0.1",
     "pg": "^7.4.3"
   }
 }
