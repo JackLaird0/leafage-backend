@@ -18,8 +18,11 @@ exports.up = function(knex, Promise) {
       table.string('moisture');
       table.string('light');
       table.string('maintenance');
+      table.integer('zone_id').unsigned()
       table.foreign('zone_id')
         .references('zones.id');
+
+      table.timestamps(true, true);
     })
   ]);
 };
