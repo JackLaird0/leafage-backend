@@ -1,0 +1,25 @@
+{
+  "name": "leafage-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JackLaird0/leafage-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JackLaird0/leafage-backend/issues"
+  },
+  "homepage": "https://github.com/JackLaird0/leafage-backend#readme",
+  "dependencies": {
+    "knex": "^0.15.0",
+    "pg": "^7.4.3"
+  }
+}
