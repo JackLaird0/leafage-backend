@@ -7,15 +7,7 @@ exports.seed = function (knex, Promise) {
         knex('zones').insert({ name: '2', lowTemp: -50, highTemp: -40}, 'id'),
         knex('zones').insert({ name: '3', lowTemp: -40, highTemp: -30 }, 'id'),
         knex('zones').insert({ name: '4', lowTemp: -30, highTemp: -20 }, 'id'),
-        knex('zones').insert({ name: '5', lowTemp: -20, highTemp: -10 }, 'id'),
-        knex('zones').insert({ name: '6', lowTemp: -10, highTemp: 0 }, 'id'),
-        knex('zones').insert({ name: '7', lowTemp: 0, highTemp: 10 }, 'id'),
-        knex('zones').insert({ name: '8', lowTemp: 10, highTemp: 20 }, 'id'),
-        knex('zones').insert({ name: '9', lowTemp: 20, highTemp: 30 }, 'id'),
-        knex('zones').insert({ name: '10', lowTemp: 30, highTemp: 40 }, 'id'),
-        knex('zones').insert({ name: '11', lowTemp: 40, highTemp: 50 }, 'id'),
-        knex('zones').insert({ name: '12', lowTemp: 50, highTemp: 60 }, 'id'),
-        knex('zones').insert({ name: '13', lowTemp: 60, highTemp: 70 }, 'id')
+        knex('zones').insert({ name: '5', lowTemp: -20, highTemp: -10 }, 'id')
           .then(zones => {
             return knex('plants').insert([
               {

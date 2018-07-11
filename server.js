@@ -20,7 +20,7 @@ app.get('/api/v1/zones/', (request, response) => {
 });
 
 app.get('/api/v1/plants/', (request, response) => {
-  databse('zones').select()
+  database('plants').select()
     .then( plants => {
       response.status(200).json(plants)
     })
@@ -29,13 +29,14 @@ app.get('/api/v1/plants/', (request, response) => {
     })
 });
 
-app.post('/api/v1/plants', (request, response) => {
+app.post('/api/v1/plants/', (request, response) => {
   const { plant } = request.body;
 
   for(let requiredParameter of ['name', 'scientificName', 'care', 'moisture', 'light', 'maintenance', 'zone_id']) {
-    return response.status(422)
-      .send({ error: `Expected formmat: { plant: { name: <String>, scientificName: <String>, care: <String>, 
-        moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You're missing a "${requiredParameter}" property.`})
+    if(!plant[requiredParameter]){
+      return response.status(422)
+      .send({ error: `Expected format: { plant: { name: <String>, scientificName: <String>, care: <String>, moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You're missing a "${requiredParameter}" property.`})
+    }
   }
 
   database('plants').insert(plant, 'id')
@@ -47,6 +48,8 @@ app.post('/api/v1/plants', (request, response) => {
     });
 });
 
-app.listen(router.get('port'), () => {
-  console.log(`Leafage's Backend is running on ${router.get('port')}.`)
+app.listen(app.get('port'), () => {
+  console.log(`Leafage's Backend is running on ${app.get('port')}.`)
 });
+
+module.exports = app;
