@@ -30,9 +30,9 @@ const plantURLs = require('./planturls');
 //   let setupFilePath = __dirname + '/./planturls.js'
 //   fs.writeFile(setupFilePath, JSON.stringify(allURLs))
 // });
-let fake = ["https://www.finegardening.com/plant/queen-of-the-prairie", "https://www.finegardening.com/plant/ironweed"]
+
 let plantObjects = []
-fake.reduce(function (accumulator, url) {
+plantURLs.reduce(function (accumulator, url) {
   return accumulator.then(function (results) {
     return nightmare.goto(url)
       .wait('.article__top__content--main')
