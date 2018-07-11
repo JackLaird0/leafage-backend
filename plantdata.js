@@ -1,0 +1,1 @@
+[{"care":"Plant in in full to partial sun, in medium to moist soil. Should the plant dry out or the leaves get scorched, they may be cut back to promote new growth. Information provided by Prairie Nursery","light":":","maintenance":":","name":"Queen of the Prairie","scientificName":"Filipendula rubra","zone_id":"3"},null]

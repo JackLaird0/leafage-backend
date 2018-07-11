@@ -30,9 +30,9 @@ const plantURLs = require('./planturls');
 //   let setupFilePath = __dirname + '/./planturls.js'
 //   fs.writeFile(setupFilePath, JSON.stringify(allURLs))
 // });
-
+let fake = ["https://www.finegardening.com/plant/queen-of-the-prairie", "https://www.finegardening.com/plant/ironweed"]
 let plantObjects = []
-plantURLs.reduce(function (accumulator, url) {
+fake.reduce(function (accumulator, url) {
   return accumulator.then(function (results) {
     return nightmare.goto(url)
       .wait('.article__top__content--main')
@@ -70,6 +70,7 @@ plantURLs.reduce(function (accumulator, url) {
       .then(function (result) {
         plantObjects.push(result)
       })
+      .catch(() => plantObjects.push(null))
   });
 }, Promise.resolve([])).then(function (results) {
   let setupFilePath = __dirname + '/./plantdata.js'
