@@ -39,18 +39,19 @@ describe('API Routes', () => {
       chai.request(server)
         .get('/api/v1/zones')
         .end((err, resp) => {
+          const zoneIndex = resp.body.findIndex(zone => zone.name === '1');
           resp.should.have.status(200);
           resp.should.be.json;
           resp.body.should.be.a('array');
           resp.body.length.should.equal(13);
-          resp.body[0].should.have.property('id');
-          resp.body[0].id.should.equal(1);
-          resp.body[0].should.have.property('name');
-          resp.body[0].name.should.equal('1');
-          resp.body[0].should.have.property('lowTemp');
-          resp.body[0].lowTemp.should.equal('-60');
-          resp.body[0].should.have.property('highTemp');
-          resp.body[0].highTemp.should.equal('-50');
+          resp.body[zoneIndex].should.have.property('id');
+          resp.body[zoneIndex].id.should.equal(1);
+          resp.body[zoneIndex].should.have.property('name');
+          resp.body[zoneIndex].name.should.equal('1');
+          resp.body[zoneIndex].should.have.property('lowTemp');
+          resp.body[zoneIndex].lowTemp.should.equal('-60');
+          resp.body[zoneIndex].should.have.property('highTemp');
+          resp.body[zoneIndex].highTemp.should.equal('-50');
           done();
         });
     });
