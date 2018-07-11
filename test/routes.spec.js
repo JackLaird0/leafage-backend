@@ -85,4 +85,22 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('POST /api/v1/plants/', () => {
+    it('should add a plant', done => {
+      chai.request(server)
+        .post('/api/v1/plants')
+        .send({
+          plant: { name: 'cacti', scientificName: 'cactAPi', care: 'dont', 
+          moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
+        })
+        .end((err, resp) => {
+          resp.should.have.status(201);
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal(3);
+          done();
+        });
+    });
+  });
 });
