@@ -62,26 +62,27 @@ describe('API Routes', () => {
       chai.request(server)
         .get('/api/v1/plants/')
         .end((err, resp) => {
+          const plantIndex = resp.body.findIndex(plant => plant.name === 'Aloe');
           resp.should.have.status(200);
           resp.should.be.json;
           resp.body.should.be.a('array');
           resp.body.length.should.equal(2);
-          resp.body[0].should.have.property('id');
-          resp.body[0].id.should.equal(1);
-          resp.body[0].should.have.property('name');
-          resp.body[0].name.should.equal('Aloe');
-          resp.body[0].should.have.property('scientificName');
-          resp.body[0].scientificName.should.equal('sciAloe');
-          resp.body[0].should.have.property('care');
-          resp.body[0].care.should.equal('dont let it die');
-          resp.body[0].should.have.property('moisture');
-          resp.body[0].moisture.should.equal('not dry');
-          resp.body[0].should.have.property('light');
-          resp.body[0].light.should.equal('bright');
-          resp.body[0].should.have.property('maintenance');
-          resp.body[0].maintenance.should.equal('often');
-          resp.body[0].should.have.property('zone_id');
-          resp.body[0].zone_id.should.equal(1);
+          resp.body[plantIndex].should.have.property('id');
+          resp.body[plantIndex].id.should.equal(1);
+          resp.body[plantIndex].should.have.property('name');
+          resp.body[plantIndex].name.should.equal('Aloe');
+          resp.body[plantIndex].should.have.property('scientificName');
+          resp.body[plantIndex].scientificName.should.equal('sciAloe');
+          resp.body[plantIndex].should.have.property('care');
+          resp.body[plantIndex].care.should.equal('dont let it die');
+          resp.body[plantIndex].should.have.property('moisture');
+          resp.body[plantIndex].moisture.should.equal('not dry');
+          resp.body[plantIndex].should.have.property('light');
+          resp.body[plantIndex].light.should.equal('bright');
+          resp.body[plantIndex].should.have.property('maintenance');
+          resp.body[plantIndex].maintenance.should.equal('often');
+          resp.body[plantIndex].should.have.property('zone_id');
+          resp.body[plantIndex].zone_id.should.equal(1);
           done();
         });
     });
