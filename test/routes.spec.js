@@ -102,5 +102,18 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return an error if the body is incorrect', done => {
+      chai.request(server)
+        .post('/api/v1/plants')
+        .send({
+          plant: {}
+        })
+        .end((err, resp) => {
+          resp.should.have.status(422);
+          resp.body.error.should.equal('Expected format: { plant: { name: <String>, scientificName: <String>, care: <String>, moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You\'re missing a "name" property.');
+          done();
+        });
+    });
   });
 });
