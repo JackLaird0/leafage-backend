@@ -63,14 +63,27 @@ nightmare
     const scientificName = document.querySelector('.article__plant-nomenclature').innerText.split('\n')[0]
     const cells = document.querySelectorAll('p')
     var list = [].slice.call(cells);
-    const allPTags = list.map(function (node, index) {
+    const allPTags = list.map(function (node) {
       return `${node.innerText}`
     });
+    const allPlantProperties = document.querySelectorAll('.article__plant-guide__properties__list-item')
+    const propertyList = [].slice.call(allPlantProperties)
+    const allListItems = propertyList.map(function (node) {
+      return `${node.innerText}`
+    })
+    const zone_id = allListItems[2].split(' ')[2].split('')[0]
     const care = allPTags[3].split('\n')[1]
+    const light = allListItems[5].split(' ')[2]
+    const maintenance = allListItems[6].split(' ')[2]
+    const moisture = allListItems[4].split('Moisture : ')[1]
     return {
       name,
       scientificName,
-      care
+      care,
+      zone_id,
+      light,
+      maintenance,
+      moisture
     }
     })
     .then(function (result) {
