@@ -79,7 +79,7 @@ app.get('/api/v1/plants', (request, response) => {
     })
 });
 
-app.get('/api/v1/plants/:id', (request, response) => {
+app.get('/api/v1/plants/:id', checkAuth, (request, response) => {
   const {id} = request.params;
   database('plants').where('id', id).select()
     .then(plant => {
@@ -114,6 +114,12 @@ app.post('/api/v1/plants', checkAuth, (request, response) => {
         });
     });
 });
+
+app.put('/api/v1/zones/:id', checkAuth, (request, response) => {
+  const { id } = request.params;
+
+
+})
 
 app.listen(app.get('port'), () => {
   console.log(`Leafage's Backend is running on ${app.get('port')}.`)
