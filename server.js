@@ -52,7 +52,7 @@ app.get('/api/v1/zones/', (request, response) => {
     })
 });
 
-app.get('/api/v1/plants', checkAuth, (request, response) => {
+app.get('/api/v1/plants', (request, response) => {
   database('plants').select()
     .then( plants => {
       response.status(200).json(plants)
