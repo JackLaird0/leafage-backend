@@ -62,7 +62,6 @@ describe('API Routes', () => {
       chai.request(server)
         .get('/api/v1/zones/2')
         .end((err, resp) => {
-          console.log(resp.body)
           resp.should.have.status(200);
           resp.should.be.json;
           resp.body.should.be.a('object');
@@ -74,6 +73,14 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return an error if given invlid id', done => {
+      chai.request(server)
+        .get('/api/v1/zones/212345')
+        .end((err, resp) => {
+
+        })
+    })
   });
 
   describe('GET /api/v1/plants/', () => {
