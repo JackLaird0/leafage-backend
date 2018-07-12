@@ -57,6 +57,29 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET /api/v1/zones/:id', () => {
+    it('should return an array of one zone object', done => {
+      chai.request(server)
+        .get('/api/v1/zones/2')
+        .end((err, resp) => {
+          const zoneIndex = resp.body.findIndex(zone => zone.name === '2');
+          resp.should.have.status(200);
+          resp.should.be.json;
+          resp.body.should.be.a('array');
+          resp.body.length.should.equal(1);
+          resp.body[zoneIndex].should.have.property('id');
+          resp.body[zoneIndex].id.should.equal(2);
+          resp.body[zoneIndex].should.have.property('name');
+          resp.body[zoneIndex].name.should.equal('2');
+          resp.body[zoneIndex].should.have.property('lowTemp');
+          resp.body[zoneIndex].lowTemp.should.equal('-50');
+          resp.body[zoneIndex].should.have.property('highTemp');
+          resp.body[zoneIndex].highTemp.should.equal('-40');
+          done();
+        });
+    });
+  });
+
   describe('GET /api/v1/plants/', () => {
     it('should return an array of plant objects', done => {
       chai.request(server)
