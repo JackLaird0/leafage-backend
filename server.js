@@ -115,6 +115,34 @@ app.post('/api/v1/plants', checkAuth, (request, response) => {
     });
 });
 
+app.put('/api/v1/zones/:id', checkAuth, (request, response) => {
+  const { id } = request.params;
+
+  const { zone } = request.body;
+  for (let requiredParameter of ['name', 'lowTemp', 'highTemp']) {
+    if (!zone[requiredParameter]) {
+      return response.status(422)
+        .send({ error: `Expected format: { zone: { name: <String>, lowTemp: <String>, highTemp: <String>. You're missing a "${requiredParameter}" property.` })
+    }
+  }
+
+  const { name, lowTemp, highTemp } = zone;
+
+  database('zones').where('id', id)
+    .update({
+      name,
+      lowTemp,
+      highTemp,
+      id
+    })
+    .then(() => {
+      response.status(201).json({ ...zone, id })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.put('/api/v1/plants/:id', checkAuth, (request, response) => {
   const { id } = request.params;
 
