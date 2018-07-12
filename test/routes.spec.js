@@ -181,13 +181,13 @@ describe('API Routes', () => {
   
     it('should return an error if given invalid id', done => {
       chai.request(server)
-        .get('/api/v1/zones/212345')
+        .get('/api/v1/plants/212345')
         .end((err, resp) => {
           resp.should.have.status(404);
           resp.should.be.json;
           resp.body.should.be.a('object');
           resp.body.should.have.property('error');
-          resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.')
+          resp.body.error.should.equal('Unable to find plant with matching id. Use /api/v1/plants/ endpoint to view all plants, or a valid ID at /api/v1/plants/:id to view one.')
           done()
         })
     })
