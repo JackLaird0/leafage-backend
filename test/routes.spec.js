@@ -1,6 +1,5 @@
 const environment = process.env.NODE_ENV = 'test';
 const chai = require('chai');
-const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const configuration = require('../knexfile')[environment];
@@ -94,7 +93,7 @@ describe('API Routes', () => {
         .post('/api/v1/plants')
         .send({
           plant: { name: 'cacti', scientificName: 'cactAPi', care: 'dont', 
-          moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
+            moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
         })
         .end((err, resp) => {
           resp.should.have.status(201);
