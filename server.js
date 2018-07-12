@@ -7,9 +7,26 @@ const database = require('knex')(configuration);
 const jwt = require('jsonwebtoken');
 const jswtKey = require('./json-key.js');
 
+
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3000);
+
+const checkAuth = (request, response, next) => {
+  const token = request.headers['x-token'];
+  
+  if (token) {
+    jwt.verify(token, jswtKey, (error, decoded) => {
+      if (error) {
+        return response.status(403).json({error: `You must have a valid token to make a ${request.method} request.`})
+      } 
+      console.log(decoded)
+      next();
+    })
+  } else {
+    return response.status(403).json({error: `You must have a token to make a ${request.method} request.`})
+  }
+}
 
 app.post('/authentication', (request, response) => {
   const { user } = request.body;
@@ -35,7 +52,7 @@ app.get('/api/v1/zones/', (request, response) => {
     })
 });
 
-app.get('/api/v1/plants/', (request, response) => {
+app.get('/api/v1/plants', checkAuth, (request, response) => {
   database('plants').select()
     .then( plants => {
       response.status(200).json(plants)
@@ -46,9 +63,8 @@ app.get('/api/v1/plants/', (request, response) => {
 });
 
 
-app.post('/api/v1/plants/', (request, response) => {
+app.post('/api/v1/plants', checkAuth, (request, response) => {
   const { plant } = request.body;
-
   for(let requiredParameter of ['name', 'scientificName', 'care', 'moisture', 'light', 'maintenance', 'zone_id']) {
     if(!plant[requiredParameter]){
       return response.status(422)
@@ -58,7 +74,6 @@ app.post('/api/v1/plants/', (request, response) => {
 
   database('zones').where('name', plant.zone_id)
     .then(zone => {
-      console.log(zone)
       plant.zone_id = zone[0].id
       database('plants').insert(plant, 'id')
         .then( plant => {
@@ -67,8 +82,7 @@ app.post('/api/v1/plants/', (request, response) => {
         .catch( error => {
           response.status(500).json({ error })
         });
-    })
-
+    });
 });
 
 app.listen(app.get('port'), () => {
