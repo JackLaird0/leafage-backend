@@ -45,13 +45,6 @@
       "error",
       "never"
     ],
-    "comma-spacing": [
-      "error",
-      {
-        "before": false,
-        "after": true
-      }
-    ],
     "comma-style": [
       "error",
       "last"
