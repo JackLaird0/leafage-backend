@@ -29,6 +29,7 @@ app.get('/api/v1/plants/', (request, response) => {
     })
 });
 
+
 app.post('/api/v1/plants/', (request, response) => {
   const { plant } = request.body;
 
@@ -39,13 +40,19 @@ app.post('/api/v1/plants/', (request, response) => {
     }
   }
 
-  database('plants').insert(plant, 'id')
-    .then( plant => {
-      response.status(201).json({ id: plant[0] })
+  database('zones').where('name', plant.zone_id)
+    .then(zone => {
+      console.log(zone)
+      plant.zone_id = zone[0].id
+      database('plants').insert(plant, 'id')
+        .then( plant => {
+          response.status(201).json({ plant })
+        })
+        .catch( error => {
+          response.status(500).json({ error })
+        });
     })
-    .catch( error => {
-      response.status(500).json({ error })
-    });
+
 });
 
 app.listen(app.get('port'), () => {
