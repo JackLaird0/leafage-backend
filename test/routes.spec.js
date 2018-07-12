@@ -74,11 +74,16 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return an error if given invlid id', done => {
+    it('should return an error if given invalid id', done => {
       chai.request(server)
         .get('/api/v1/zones/212345')
         .end((err, resp) => {
-
+          resp.should.have.status(404);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('error');
+          resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.')
+          done()
         })
     })
   });
@@ -124,7 +129,6 @@ describe('API Routes', () => {
           moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
         })
         .end((err, resp) => {
-          console.log(resp.body)
           resp.should.have.status(201);
           resp.body.should.be.a('object');
           resp.body.should.have.property('id');
