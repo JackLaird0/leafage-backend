@@ -20,7 +20,6 @@ const checkAuth = (request, response, next) => {
       if (error) {
         return response.status(403).json({error: `You must have a valid token to make a ${request.method} request.`})
       } 
-      console.log(decoded)
       next();
     })
   } else {
@@ -58,7 +57,7 @@ app.get('/api/v1/zones/:id', (request, response) => {
   database('zones').where('id', id).select()
     .then( zone => {
       if (zone[0]) {
-        response.status(200).json(zone)
+        response.status(200).json(zone[0])
       } else {
         response.status(404).json({
           error: 'Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.'
@@ -93,8 +92,8 @@ app.post('/api/v1/plants', checkAuth, (request, response) => {
     .then(zone => {
       plant.zone_id = zone[0].id
       database('plants').insert(plant, 'id')
-        .then( plant => {
-          response.status(201).json({ plant })
+        .then( plantID => {
+          response.status(201).json(plant)
         })
         .catch( error => {
           response.status(500).json({ error })

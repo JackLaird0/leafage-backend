@@ -58,23 +58,19 @@ describe('API Routes', () => {
   });
 
   describe('GET /api/v1/zones/:id', () => {
-    it('should return an array of one zone object', done => {
+    it('should return one zone object', done => {
       chai.request(server)
         .get('/api/v1/zones/2')
         .end((err, resp) => {
-          const zoneIndex = resp.body.findIndex(zone => zone.name === '2');
+          console.log(resp.body)
           resp.should.have.status(200);
           resp.should.be.json;
-          resp.body.should.be.a('array');
-          resp.body.length.should.equal(1);
-          resp.body[zoneIndex].should.have.property('id');
-          resp.body[zoneIndex].id.should.equal(2);
-          resp.body[zoneIndex].should.have.property('name');
-          resp.body[zoneIndex].name.should.equal('2');
-          resp.body[zoneIndex].should.have.property('lowTemp');
-          resp.body[zoneIndex].lowTemp.should.equal('-50');
-          resp.body[zoneIndex].should.have.property('highTemp');
-          resp.body[zoneIndex].highTemp.should.equal('-40');
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal(2);
+          resp.body.should.have.property('name');
+          resp.body.should.have.property('lowTemp');
+          resp.body.should.have.property('highTemp');
           done();
         });
     });
@@ -115,11 +111,13 @@ describe('API Routes', () => {
     it('should add a plant', done => {
       chai.request(server)
         .post('/api/v1/plants')
+        .set('x-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdlaWNvR2Vja29AZ2VpY28uY29tIiwidXNlcm5hbWUiOiJ5YXlmaWJlciIsImlhdCI6MTUzMTQxNTg5NSwiZXhwIjoxNTMxNTAyMjk1fQ.3QSaCCHxF9TVwAUf_ADxsA4CSzFbNPU7M1mC4G0yrC8')
         .send({
           plant: { name: 'cacti', scientificName: 'cactAPi', care: 'dont', 
           moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
         })
         .end((err, resp) => {
+          console.log(resp.body)
           resp.should.have.status(201);
           resp.body.should.be.a('object');
           resp.body.should.have.property('id');
