@@ -21,7 +21,8 @@ const plantData = [
     care: 'dont let it die',
     moisture: 'not dry',
     light: 'bright',
-    maintenance: 'often'
+    maintenance: 'often',
+    zone_id: 3
   },
   {
     name: 'Cactus',
@@ -29,7 +30,8 @@ const plantData = [
     care: 'dont put in closet',
     moisture: 'dry',
     light: 'DARK',
-    maintenance: 'never'
+    maintenance: 'never',
+    zone_id: 2
   }
 ]
 

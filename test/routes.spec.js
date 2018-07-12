@@ -57,6 +57,37 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET /api/v1/zones/:id', () => {
+    it('should return one zone object', done => {
+      chai.request(server)
+        .get('/api/v1/zones/2')
+        .end((err, resp) => {
+          resp.should.have.status(200);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal(2);
+          resp.body.should.have.property('name');
+          resp.body.should.have.property('lowTemp');
+          resp.body.should.have.property('highTemp');
+          done();
+        });
+    });
+
+    it('should return an error if given invalid id', done => {
+      chai.request(server)
+        .get('/api/v1/zones/212345')
+        .end((err, resp) => {
+          resp.should.have.status(404);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('error');
+          resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.')
+          done()
+        })
+    })
+  });
+
   describe('GET /api/v1/plants/', () => {
     it('should return an array of plant objects', done => {
       chai.request(server)
@@ -92,6 +123,7 @@ describe('API Routes', () => {
     it('should add a plant', done => {
       chai.request(server)
         .post('/api/v1/plants')
+        .set('x-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdlaWNvR2Vja29AZ2VpY28uY29tIiwidXNlcm5hbWUiOiJ5YXlmaWJlciIsImlhdCI6MTUzMTQxNTg5NSwiZXhwIjoxNTMxNTAyMjk1fQ.3QSaCCHxF9TVwAUf_ADxsA4CSzFbNPU7M1mC4G0yrC8')
         .send({
           plant: { name: 'cacti', scientificName: 'cactAPi', care: 'dont', 
           moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
@@ -117,5 +149,47 @@ describe('API Routes', () => {
           done();
         });
     });
+  });
+
+  describe('GET /api/v1/plants/:id', () => {
+    it('should return one plant object', done => {
+      chai.request(server)
+        .get('/api/v1/plants/2')
+        .end((err, resp) => {
+          resp.should.have.status(200);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal(2);
+          resp.body.should.have.property('name');
+          resp.body.name.should.equal('Cactus');
+          resp.body.should.have.property('scientificName');
+          resp.body.scientificName.should.equal('sciCactus');
+          resp.body.should.have.property('care');
+          resp.body.care.should.equal('dont put in closet');
+          resp.body.should.have.property('moisture');
+          resp.body.moisture.should.equal('dry');
+          resp.body.should.have.property('light');
+          resp.body.light.should.equal('DARK');
+          resp.body.should.have.property('maintenance');
+          resp.body.maintenance.should.equal('never');
+          resp.body.should.have.property('zone_id');
+          resp.body.zone_id.should.equal(1);
+          done();
+        });
+    });
+  
+    it('should return an error if given invalid id', done => {
+      chai.request(server)
+        .get('/api/v1/plants/212345')
+        .end((err, resp) => {
+          resp.should.have.status(404);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('error');
+          resp.body.error.should.equal('Unable to find plant with matching id. Use /api/v1/plants/ endpoint to view all plants, or a valid ID at /api/v1/plants/:id to view one.')
+          done()
+        })
+    })
   });
 });
