@@ -5,38 +5,39 @@ const plantURLs = require('./planturls');
 
 //The following scraper goes to 176 pages of finegardening.com to gather all applicable URLs and writes them to './planturls.js'
 
-let iterable = []
-for (let i = 1; i < 177; i++) {
-  iterable.push(i)
-}
-let allURLs = []
+// let iterable = []
+// for (let i = 1; i < 177; i++) {
+//   iterable.push(i)
+// }
+// let allURLs = []
 
-iterable.reduce(function (accumulator, pageNumber) {
-  return accumulator.then(function (results) {
-    return nightmare.goto(`https://www.finegardening.com/plant-guide?paged=${pageNumber}`)
-      .wait('.content-browser__results')
-      .evaluate(() => {
-        const cells = document.querySelectorAll('.content-browser__linked-image')
-        var list = [].slice.call(cells);
-        const pageResults = list.map(function (node, index) {
-          return `${node}`
-        });
-        return pageResults
-      })
-      .then(function (result) {
-        allURLs.push(...result)
-      })
-  });
-}, Promise.resolve([])).then(function (results) {
-  console.dir(allURLs);
-  let setupFilePath = __dirname + '/./planturls.js'
-  fs.writeFile(setupFilePath, JSON.stringify(allURLs))
-});
+// iterable.reduce(function (accumulator, pageNumber) {
+//   return accumulator.then(function (results) {
+//     return nightmare.goto(`https://www.finegardening.com/plant-guide?paged=${pageNumber}`)
+//       .wait('.content-browser__results')
+//       .evaluate(() => {
+//         const cells = document.querySelectorAll('.content-browser__linked-image')
+//         var list = [].slice.call(cells);
+//         const pageResults = list.map(function (node, index) {
+//           return `${node}`
+//         });
+//         return pageResults
+//       })
+//       .then(function (result) {
+//         allURLs.push(...result)
+//       })
+//   });
+// }, Promise.resolve([])).then(function (results) {
+//   console.dir(allURLs);
+//   let setupFilePath = __dirname + '/./planturls.js'
+//   fs.writeFile(setupFilePath, JSON.stringify(allURLs))
+// });
 
-// The following scraper takes all imported plantURLs and goes to each individual plant page
-// about 1750 pages of data are scraped.
+// // The following scraper takes all imported plantURLs and goes to each individual plant page
+// // about 1750 pages of data are scraped.
 
 let plantObjects = []
+
 plantURLs.reduce(function (accumulator, url) {
   return accumulator.then(function (results) {
     return nightmare.goto(url)
@@ -54,10 +55,7 @@ plantURLs.reduce(function (accumulator, url) {
         const allListItems = propertyList.map(function (node) {
           return `${node.innerText}`
         })
-        let zone_id = allListItems[2].split(' ')[2].split('')[0]
-        if (zone_id === ':') {
-          zone_id = allListItems[2].split(' ')[2].split('')[1]
-        }
+        let zone_id = allListItems.find(string => string.split(' ').includes('Zones')).split(' ')[2].split(' ').filter(char => char !== ',' && char !== ':' && char !== 'Zones')[0].split('')[0]
         const care = allPTags[3].split('\n')[1]
         const light = allListItems[5].split(' ')[2]
         const maintenance = allListItems[6].split(' ')[2]
