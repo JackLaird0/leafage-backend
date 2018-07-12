@@ -13,20 +13,19 @@ app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);
 
 const checkAuth = (request, response, next) => {
-  console.log(request.headers)
-  // const  authorization  = request.headers.Authorization;
-  // if (token) {
-  //   jwt.verify(token, jswtKey, (error, decoded) => {
-  //     if (error) {
-  //       return response.status(403).json({error: `You must have a valid token to make a ${request.method} request.`})
-  //     } 
-  //     console.log(decoded)
-  //     next();
-  //   })
-  // } else {
-  //   return response.status(403).json({error: `You must have a token to make a ${request.method} request.`})
-  // }
-  next();
+  const token = request.headers['x-token'];
+  
+  if (token) {
+    jwt.verify(token, jswtKey, (error, decoded) => {
+      if (error) {
+        return response.status(403).json({error: `You must have a valid token to make a ${request.method} request.`})
+      } 
+      console.log(decoded)
+      next();
+    })
+  } else {
+    return response.status(403).json({error: `You must have a token to make a ${request.method} request.`})
+  }
 }
 
 app.post('/authentication', (request, response) => {
