@@ -115,10 +115,36 @@ app.post('/api/v1/plants', checkAuth, (request, response) => {
     });
 });
 
-app.put('/api/v1/zones/:id', checkAuth, (request, response) => {
+app.put('/api/v1/plants/:id', checkAuth, (request, response) => {
   const { id } = request.params;
 
+  const { plant } = request.body;
+  for (let requiredParameter of ['name', 'scientificName', 'care', 'moisture', 'light', 'maintenance', 'zone_id']) {
+    if (!plant[requiredParameter]) {
+      return response.status(422)
+        .send({ error: `Expected format: { plant: { name: <String>, scientificName: <String>, care: <String>, moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You're missing a "${requiredParameter}" property.` })
+    }
+  }
 
+  const {name, scientificName, care, moisture, light, maintenance, zone_id} = plant;
+
+  database('plants').where('id', id)
+    .update({
+      name,
+      scientificName,
+      care,
+      moisture,
+      light,
+      maintenance,
+      zone_id,
+      id
+    })
+      .then(() => {
+        response.status(201).json({...plant, id})
+      })
+      .catch(error => {
+        response.status(500).json({error})
+      })
 })
 
 app.listen(app.get('port'), () => {
