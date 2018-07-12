@@ -10,8 +10,7 @@ exports.seed = function (knex, Promise) {
           }))
           .then(zones => {
             allPlants.forEach(plant => {
-              // plant.zone_id = zones.find(zone => zone[0].name === plant.zone_id)
-              console.log(plant)
+              plant.zone_id = zones.find(zone => zone[0].name === plant.zone_id.toString())[0].id
             })
             return knex('plants').insert(allPlants)
           })

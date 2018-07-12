@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.string('name');
       table.string('scientificName');
-      table.string('care');
+      table.string('care', 1000);
       table.string('moisture');
       table.string('light');
       table.string('maintenance');
