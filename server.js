@@ -4,10 +4,26 @@ const bodyParser = require('body-parser');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const jwt = require('jsonwebtoken');
+const jswtKey = require('./json-key.js');
 
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3000);
+
+app.post('/authentication', (request, response) => {
+  const { user } = request.body;
+
+  for(let requiredParameter of ['email', 'username']) {
+    if(!user[requiredParameter]) {
+      return response.status(422)
+        .send({ error: `Expected format: { user: { email: <String>, username: <String>}}. You're missing a ${requiredParam}`})
+    }
+  }
+
+  const token = jwt.sign(user, jswtKey, {expiresIn: '1 day'})
+  response.status(201).json({ token })
+});
 
 app.get('/api/v1/zones/', (request, response) => {
   database('zones').select()
