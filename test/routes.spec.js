@@ -56,6 +56,17 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return an error if there are missing params from the body', done => {
+      chai.request(server)
+        .post('/authentication')
+        .send({ user: {} })
+        .end((err, resp) => {
+          resp.should.have.status(422)
+          resp.body.error.should.equal('Expected format: { user: { email: <String>, username: <String>} }. You\'re missing a email property.' )
+          done();
+        })
+    });
   });
 
   describe('GET /api/v1/zones', () => {
@@ -153,7 +164,6 @@ describe('API Routes', () => {
           moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
         })
         .end((err, resp) => {
-          console.log(resp.body)
           resp.should.have.status(201);
           resp.body.should.be.a('object');
           resp.body.should.have.property('id');
