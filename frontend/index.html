@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>LEAFAGE</title>
+    <style type="text/css">body,button,html{text-align:center}body,html{margin: 10px 50px;font-family:'Helvetica Neue'}button{border:0;background-color:pink;color:#fff;padding:15px 30px;margin:0 auto}.Token{font-family:'Courier New';border:1px solid #eee;padding:20px;margin:20px auto;overflow-wrap:break-word}h1{font-size: 60px; margin-top: 0px;}</style>
+  </head>
+  <body>
+    <h1>Leafage</h1>
+    <span>Username:</span>
+    <input type="text" class='username'>
+    <span>Email:</span>
+    <input type="text" class='email'>
+    <button id="getToken">Get Token</button>
+    <div class='Token'></div>
+
+    <script type="text/javascript">
+
+      const getToken = () => {
+        const email = document.querySelector('.email').value
+        const username = document.querySelector('.username').value
+        
+        const body = { user: {username, email}}
+        fetch('/authentication', {
+          body: JSON.stringify(body),
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST'
+        })
+        .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          if (data.token !== undefined) {
+            document.querySelector('.Token').innerText = data.token;
+          } else {
+            document.querySelector('.Token').innerText = 'Please enter a valid username and email';
+          }
+        })
+      }
+      document.querySelector('#getToken').addEventListener('click', getToken)
+      </script>
+</html>
