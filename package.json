@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "NODE_ENV=test mocha --exit",
+    "test": "NODE_ENV=test mocha",
     "lint": "./node_modules/eslint/bin/eslint.js ./"
   },
   "repository": {
