@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-- node
+  '8'
 services:
-- postgresql
+  postgresql
 before_script:
-- psql -c 'CREATE DATABASE leafage;' -U postgres
+  psql -c 'CREATE DATABASE leafage;' 
 notifications:
   email: false
