@@ -5,6 +5,8 @@ const chaiHttp = require('chai-http');
 const server = require('../server');
 const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
+const jwt = require('jsonwebtoken');
+const jswtKey = require('../json-key');
 
 chai.use(chaiHttp);
 
@@ -20,6 +22,13 @@ describe('Client Routes', () => {
 });
 
 describe('API Routes', () => {
+  let webToken;
+  let user;
+  before( done => {
+    user = {user: { email: 'jake.statefarm@gmail.com', username: 'jakefromstatefarm'} };
+    webToken = jwt.sign(user, jswtKey);
+    done();
+  });
 
   beforeEach( done => {
     knex.migrate.rollback()
@@ -32,6 +41,32 @@ describe('API Routes', () => {
               });
           });
       });
+  });
+
+  describe('POST /authenication', () => {
+    it('should return a token object', done => {
+      chai.request(server)
+        .post('/authentication')
+        .send(user)
+        .end((err, resp) => {
+          resp.should.have.status(201);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('token');
+          done();
+        });
+    });
+
+    it('should return an error if there are missing params from the body', done => {
+      chai.request(server)
+        .post('/authentication')
+        .send({ user: {} })
+        .end((err, resp) => {
+          resp.should.have.status(422)
+          resp.body.error.should.equal('Expected format: { user: { email: <String>, username: <String>} }. You\'re missing a email property.' )
+          done();
+        })
+    });
   });
 
   describe('GET /api/v1/zones', () => {
@@ -123,7 +158,7 @@ describe('API Routes', () => {
     it('should add a plant', done => {
       chai.request(server)
         .post('/api/v1/plants')
-        .set('x-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdlaWNvR2Vja29AZ2VpY28uY29tIiwidXNlcm5hbWUiOiJ5YXlmaWJlciIsImlhdCI6MTUzMTQxNTg5NSwiZXhwIjoxNTMxNTAyMjk1fQ.3QSaCCHxF9TVwAUf_ADxsA4CSzFbNPU7M1mC4G0yrC8')
+        .set('x-token', webToken)
         .send({
           plant: { name: 'cacti', scientificName: 'cactAPi', care: 'dont', 
           moisture: 'almost none', light: 'lots', maintenance: 'none', zone_id: 1 }
@@ -140,6 +175,7 @@ describe('API Routes', () => {
     it('should return an error if the body is incorrect', done => {
       chai.request(server)
         .post('/api/v1/plants')
+        .set('x-token', webToken)
         .send({
           plant: {}
         })
