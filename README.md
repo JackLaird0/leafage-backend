@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/JackLaird0/leafage-backend.svg?branch=master)](https://travis-ci.org/JackLaird0/leafage-backend)
 # ![leaf](./public/assets/leaf.png) Leafage Backend ![leaf](./public/assets/leaf.png)
 ## B.Y.O.B - Build Your Own Backend project
 ---
