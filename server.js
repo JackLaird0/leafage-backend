@@ -5,7 +5,7 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 const jwt = require('jsonwebtoken');
-const jswtKey = require('./json-key.js');
+const jswtKey = process.env.secret_key ? process.env.secret_key : require('./json-key.js');
 
 
 app.use(bodyParser.json());
@@ -14,7 +14,6 @@ app.set('port', process.env.PORT || 3000);
 
 const checkAuth = (request, response, next) => {
   const token = request.headers['x-token'];
-  
   if (token) {
     jwt.verify(token, jswtKey, (error, decoded) => {
       if (error) {
@@ -33,7 +32,7 @@ app.post('/authentication', (request, response) => {
   for(let requiredParameter of ['email', 'username']) {
     if(!user[requiredParameter]) {
       return response.status(422)
-        .send({ error: `Expected format: { user: { email: <String>, username: <String>}}. You're missing a ${requiredParam}`})
+      .json({ error: `Expected format: { user: { email: <String>, username: <String>} }. You're missing a ${requiredParameter} property.`})
     }
   }
 
@@ -107,7 +106,7 @@ app.post('/api/v1/plants', checkAuth, (request, response) => {
       plant.zone_id = zone[0].id
       database('plants').insert(plant, 'id')
         .then( plantID => {
-          response.status(201).json(plant)
+          response.status(201).json({id: plantID[0]})
         })
         .catch( error => {
           response.status(500).json({ error })
