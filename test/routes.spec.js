@@ -5,7 +5,7 @@ const server = require('../server');
 const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 const jwt = require('jsonwebtoken');
-const jswtKey = require('../json-key');
+const jswtKey = process.env.secret_key ? process.env.secret_key : require('../json-key');
 
 chai.use(chaiHttp);
 
