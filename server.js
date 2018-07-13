@@ -7,7 +7,6 @@ const database = require('knex')(configuration);
 const jwt = require('jsonwebtoken');
 const jswtKey = process.env.secret_key ? process.env.secret_key : require('./json-key.js');
 
-
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3000);
@@ -69,16 +68,29 @@ app.get('/api/v1/zones/:id', (request, response) => {
 })
 
 app.get('/api/v1/plants', (request, response) => {
-  database('plants').select()
-    .then( plants => {
-      response.status(200).json(plants)
-    })
-    .catch( error => {
-      response.status(500).json({ error })
-    })
+  if (request.query.name) {
+    const search = request.query.name;
+    database('plants').where('name', 'like', `%${search}%`)
+      .then( plants => {
+        plants.length ? 
+          response.status(200).json(plants) 
+          : response.status(404).json({error: 'Unable to find matching plant name. Please note: Name query is case sensitive.'})
+      })
+      .catch( error => {
+        response.status(500).json(error)
+      })
+  } else {
+    database('plants').select()
+      .then( plants => {
+        response.status(200).json(plants)
+      })
+      .catch( error => {
+        response.status(500).json({ error })
+      })
+  }
 });
 
-app.get('/api/v1/plants/:id', checkAuth, (request, response) => {
+app.get('/api/v1/plants/:id', (request, response) => {
   const {id} = request.params;
   database('plants').where('id', id).select()
     .then(plant => {
