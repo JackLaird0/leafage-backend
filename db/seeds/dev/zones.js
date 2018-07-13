@@ -5,17 +5,17 @@ exports.seed = function (knex, Promise) {
   return knex('plants').del()
     .then(() => knex('zones').del())
     .then(() => {
-        return Promise.all(zoneData.map(zone => {
-            return knex('zones').insert(zone, ['name', 'id'])
-          }))
-          .then(zones => {
-            allPlants.forEach(plant => {
-              plant.zone_id = zones.find(zone => zone[0].name === plant.zone_id.toString())[0].id
-            })
-            return knex('plants').insert(allPlants)
-          })
-          .then(() => console.log('Seeding complete!'))
-          .catch(error => console.log(`Error seeding data: ${error}`))
+      return Promise.all(zoneData.map(zone => {
+        return knex('zones').insert(zone, ['name', 'id']);
+      }))
+        .then(zones => {
+          allPlants.forEach(plant => {
+            plant.zone_id = zones.find(zone => zone[0].name === plant.zone_id.toString())[0].id;
+          });
+          return knex('plants').insert(allPlants);
+        })
+        .then(() => console.log('Seeding complete!'))
+        .catch(error => console.log(`Error seeding data: ${error}`))
     })
     .catch(error => console.log(`Error seeding data: ${error}`));
 };

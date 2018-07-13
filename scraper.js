@@ -1,6 +1,6 @@
 const Nightmare = require('nightmare');
 const nightmare = Nightmare({ show: true });
-const fs = require('fs')
+const fs = require('fs');
 const plantURLs = require('./planturls');
 
 //The following scraper goes to 176 pages of finegardening.com to gather all applicable URLs and writes them to './planturls.js'
@@ -36,30 +36,30 @@ const plantURLs = require('./planturls');
 // // The following scraper takes all imported plantURLs and goes to each individual plant page
 // // about 1750 pages of data are scraped.
 
-let plantObjects = []
+let plantObjects = [];
 
 plantURLs.reduce(function (accumulator, url) {
-  return accumulator.then(function (results) {
+  return accumulator.then(function () {
     return nightmare.goto(url)
       .wait('.article__top__content--main')
       .evaluate(() => {
-        const name = document.querySelector('.article__title').innerText
+        const name = document.querySelector('.article__title').innerText;
         const scientificName = document.querySelector('.article__plant-nomenclature').innerText.split('\n')[0]
         const cells = document.querySelectorAll('p')
         var list = [].slice.call(cells);
         const allPTags = list.map(function (node) {
-          return `${node.innerText}`
+          return `${node.innerText}`;
         });
-        const allPlantProperties = document.querySelectorAll('.article__plant-guide__properties__list-item')
-        const propertyList = [].slice.call(allPlantProperties)
+        const allPlantProperties = document.querySelectorAll('.article__plant-guide__properties__list-item');
+        const propertyList = [].slice.call(allPlantProperties);
         const allListItems = propertyList.map(function (node) {
-          return `${node.innerText}`
-        })
-        let zone_id = allListItems.find(string => string.split(' ').includes('Zones')).split(' ')[2].split(' ').filter(char => char !== ',' && char !== ':' && char !== 'Zones')[0].split('')[0]
-        const care = allPTags[3].split('\n')[1]
-        const light = allListItems[5].split(' ')[2]
-        const maintenance = allListItems[6].split(' ')[2]
-        const moisture = allListItems[4].split('Moisture : ')[1]
+          return `${node.innerText}`;
+        });
+        let zone_id = allListItems.find(string => string.split(' ').includes('Zones')).split(' ')[2].split(' ').filter(char => char !== ',' && char !== ':' && char !== 'Zones')[0].split('')[0];
+        const care = allPTags[3].split('\n')[1];
+        const light = allListItems[5].split(' ')[2];
+        const maintenance = allListItems[6].split(' ')[2];
+        const moisture = allListItems[4].split('Moisture : ')[1];
         return {
           name,
           scientificName,
@@ -71,11 +71,11 @@ plantURLs.reduce(function (accumulator, url) {
         }
       })
       .then(function (result) {
-        plantObjects.push(result)
+        plantObjects.push(result);
       })
-      .catch(() => plantObjects.push(null))
+      .catch(() => plantObjects.push(null));
   });
-}, Promise.resolve([])).then(function (results) {
-  let setupFilePath = __dirname + '/./plantdata.js'
-  fs.writeFile(setupFilePath, JSON.stringify(plantObjects))
+}, Promise.resolve([])).then(function () {
+  let setupFilePath = __dirname + '/./plantdata.js';
+  fs.writeFile(setupFilePath, JSON.stringify(plantObjects));
 });
