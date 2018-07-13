@@ -78,7 +78,7 @@ app.get('/api/v1/plants', (request, response) => {
     })
 });
 
-app.get('/api/v1/plants/:id', checkAuth, (request, response) => {
+app.get('/api/v1/plants/:id', (request, response) => {
   const {id} = request.params;
   database('plants').where('id', id).select()
     .then(plant => {
@@ -91,6 +91,8 @@ app.get('/api/v1/plants/:id', checkAuth, (request, response) => {
       }
     })
 })
+
+
 
 app.post('/api/v1/plants', checkAuth, (request, response) => {
   const { plant } = request.body;
