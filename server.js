@@ -8,6 +8,13 @@ const jwt = require('jsonwebtoken');
 const jswtKey = process.env.secret_key ? process.env.secret_key : require('./json-key.js');
 
 app.use(bodyParser.json());
+app.use(express.static('frontend'))
+
+app.use(function (req, res, next) { //app.use helps set up middleware, in this function's case it is allowing all CORS requests 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.set('port', process.env.PORT || 3000);
 
