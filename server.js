@@ -69,11 +69,12 @@ app.get('/api/v1/zones/:id', (request, response) => {
 
 app.get('/api/v1/plants', (request, response) => {
   if (request.query.name) {
-    database('plants').where('name', request.query.name).select()
+    const search = request.query.name;
+    database('plants').where('name', 'like', `%${search}%`)
       .then( plants => {
         plants.length ? 
           response.status(200).json(plants) 
-          : response.status(404).json({error: 'Unable to find matching plant name. Please note: Name must be exact match.'})
+          : response.status(404).json({error: 'Unable to find matching plant name. Please note: Name query is case sensitive.'})
       })
       .catch( error => {
         response.status(500).json(error)
