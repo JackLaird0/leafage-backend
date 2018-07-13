@@ -62,10 +62,12 @@ describe('API Routes', () => {
         .post('/authentication')
         .send({ user: {} })
         .end((err, resp) => {
-          resp.should.have.status(422)
-          resp.body.error.should.equal('Expected format: { user: { email: <String>, username: <String>} }. You\'re missing a email property.' )
+          resp.should.have.status(422);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.error.should.equal('Expected format: { user: { email: <String>, username: <String>} }. You\'re missing a email property.' );
           done();
-        })
+        });
     });
   });
 
@@ -118,9 +120,9 @@ describe('API Routes', () => {
           resp.body.should.be.a('object');
           resp.body.should.have.property('error');
           resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.')
-          done()
-        })
-    })
+          done();
+        });
+    });
   });
 
   describe('GET /api/v1/plants/', () => {
@@ -224,8 +226,65 @@ describe('API Routes', () => {
           resp.body.should.be.a('object');
           resp.body.should.have.property('error');
           resp.body.error.should.equal('Unable to find plant with matching id. Use /api/v1/plants/ endpoint to view all plants, or a valid ID at /api/v1/plants/:id to view one.')
-          done()
+          done();
+        });
+    });
+  });
+
+  describe('api/v1/plants/:id', () => {
+    it('should return the plant with the new data', done => {
+      chai.request(server)
+        .put('/api/v1/plants/2')
+        .set('x-token', webToken)
+        .send({
+          plant: {
+            name: 'Snacktus',
+            scientificName: 'the tastiest cactus',
+            care: 'you care',
+            moisture: 'not a lot',
+            light: 'lots',
+            maintenance: 'eat it',
+            zone_id: 3
+          }
         })
-    })
+        .end((err, resp) => {
+          resp.should.have.status(201);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal('2');
+          resp.body.should.have.property('name');
+          resp.body.name.should.equal('Snacktus');
+          resp.body.should.have.property('scientificName');
+          resp.body.scientificName.should.equal('the tastiest cactus');
+          resp.body.should.have.property('care');
+          resp.body.care.should.equal('you care');
+          resp.body.should.have.property('moisture');
+          resp.body.moisture.should.equal('not a lot');
+          resp.body.should.have.property('light');
+          resp.body.light.should.equal('lots');
+          resp.body.should.have.property('maintenance');
+          resp.body.maintenance.should.equal('eat it');
+          resp.body.should.have.property('zone_id');
+          resp.body.zone_id.should.equal(3);
+          done();
+        });
+    });
+
+    it('should return an error if the body is missing', done => {
+      chai.request(server)
+        .put('/api/v1/plants/2')
+        .set('x-token', webToken)
+        .send({
+          plant: {}
+        })
+        .end((err, resp) => {
+          resp.should.have.status(422);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.error.should.equal('Expected format: { plant: { name: <String>, scientificName: <String>, care: <String>, moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You\'re missing a "name" property.');
+          done();
+        });
+    });
   });
 });
