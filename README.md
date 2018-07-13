@@ -4,7 +4,7 @@
 ---
 ## Synopsis
 
-We learned how to build a backend server but learned a lot more about ourselves along the way. This project is built using Node, Express, Knex, PSQL, and Nightmare. We focused on building a backend with data we scraped from [Fine Gardening's](https://www.finegardening.com/) amazing [Plant Guide](https://www.finegardening.com/plant-guide). Feel free to visit our front end and get a token to use our API [here]().
+We learned how to build a backend server but learned a lot more about ourselves along the way. This project is built using Node, Express, Knex, PSQL, and Nightmare. We focused on building a backend with data we scraped from [Fine Gardening's](https://www.finegardening.com/) amazing [Plant Guide](https://www.finegardening.com/plant-guide). Feel free to visit our front end and get a token to use our API [here](https://leafage.herokuapp.com/).
 
 ---
 # Endpoints
