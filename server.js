@@ -193,6 +193,38 @@ app.put('/api/v1/plants/:id', checkAuth, (request, response) => {
       })
 })
 
+app.delete('/api/v1/plants/:id', (request, response) => { 
+  const id = request.params.id
+
+  database('plants').where('id', id).del() 
+    .then(rowsDeleted => {
+      if (rowsDeleted === 0) { 
+        response.status(404).json({ error: "No matching ID found, please enter a valid id." }) 
+      } else {
+        response.sendStatus(204) 
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error }) 
+    })
+})
+
+app.delete('/api/v1/zones/:id', (request, response) => {
+  const id = request.params.id
+
+  database('zones').where('id', id).del()
+    .then(rowsDeleted => {
+      if (rowsDeleted === 0) {
+        response.status(404).json({ error: "No matching ID found, please enter a valid id." })
+      } else {
+        response.sendStatus(204)
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`Leafage's Backend is running on ${app.get('port')}.`)
 });
