@@ -1,3 +1,3 @@
 const jswtKey = 'starroguetrecone';
 
-module.exports = jswtKey
+module.exports = jswtKey;

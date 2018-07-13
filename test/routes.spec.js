@@ -1,6 +1,5 @@
 const environment = process.env.NODE_ENV = 'test';
 const chai = require('chai');
-const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const configuration = require('../knexfile')[environment];
@@ -119,7 +118,7 @@ describe('API Routes', () => {
           resp.should.be.json;
           resp.body.should.be.a('object');
           resp.body.should.have.property('error');
-          resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.')
+          resp.body.error.should.equal('Unable to find zone with matching id. Use /api/v1/zones/ endpoint to view all zones, or a valid ID at /api/v1/zones/:id to view one.');
           done();
         });
     });
