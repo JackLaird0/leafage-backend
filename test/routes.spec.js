@@ -333,4 +333,44 @@ describe('API Routes', () => {
         });
     });
   });
+  
+  describe('DELETE /api/v1/plants/:id', () => {
+    it('should delete a palette and return a 200 status', done => {
+      chai.request(server)
+        .delete('/api/v1/plants/1')
+        .end((error, response) => {
+          response.should.have.status(204);
+          done();
+        });
+    });
+
+    it('should return a 404 error if id is not valid', done => {
+      chai.request(server)
+        .delete('/api/v1/plants/678234')
+        .end((error, response) => {
+          response.should.have.status(404);
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /api/v1/zones/:id', () => {
+    it('should delete a palette and return a 200 status', done => {
+      chai.request(server)
+        .delete('/api/v1/zones/2')
+        .end((error, response) => {
+          response.should.have.status(204);
+          done();
+        });
+    });
+
+    it('should return a 404 error if id is not valid', done => {
+      chai.request(server)
+        .delete('/api/v1/zones/678234')
+        .end((error, response) => {
+          response.should.have.status(404);
+          done();
+        });
+    });
+  });
 });
