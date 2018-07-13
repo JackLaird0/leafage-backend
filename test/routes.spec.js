@@ -231,7 +231,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('api/v1/plants/:id', () => {
+  describe('PUT api/v1/plants/:id', () => {
     it('should return the plant with the new data', done => {
       chai.request(server)
         .put('/api/v1/plants/2')
@@ -283,6 +283,52 @@ describe('API Routes', () => {
           resp.should.be.json;
           resp.body.should.be.a('object');
           resp.body.error.should.equal('Expected format: { plant: { name: <String>, scientificName: <String>, care: <String>, moisture: <String>, light: <String>, maintenance: <String>, zone_id: <Number>}}. You\'re missing a "name" property.');
+          done();
+        });
+    });
+  });
+
+  describe('PUT api/v1/zones/:id', () => {
+    it('should return the zone with the new data', done => {
+      chai.request(server)
+        .put('/api/v1/zones/2')
+        .set('x-token', webToken)
+        .send({
+          zone: {
+            name: '3',
+            lowTemp: '-30',
+            highTemp: '-10',
+            id: 2
+          }
+        })
+        .end((err, resp) => {
+          resp.should.have.status(201);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.should.have.property('id');
+          resp.body.id.should.equal('2');
+          resp.body.should.have.property('name');
+          resp.body.name.should.equal('3');
+          resp.body.should.have.property('lowTemp');
+          resp.body.lowTemp.should.equal('-30');
+          resp.body.should.have.property('highTemp');
+          resp.body.highTemp.should.equal('-10');
+          done();
+        });
+    });
+
+    it('should return an error if the body is missing', done => {
+      chai.request(server)
+        .put('/api/v1/zones/2')
+        .set('x-token', webToken)
+        .send({
+          zone: {}
+        })
+        .end((err, resp) => {
+          resp.should.have.status(422);
+          resp.should.be.json;
+          resp.body.should.be.a('object');
+          resp.body.error.should.equal('Expected format: { zone: { name: <String>, lowTemp: <String>, highTemp: <String>. You\'re missing a "name" property.');
           done();
         });
     });
